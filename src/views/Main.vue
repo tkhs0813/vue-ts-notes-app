@@ -25,6 +25,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import createUUID from '../common/uuid';
 import mockCategories from '../mock';
 
 interface Note {
@@ -47,19 +48,6 @@ export default class Main extends Vue {
 
   selectedNote: Note | null = null;
 
-  // todo: idは category_id_{uuid} にする
-  defaultCategory: Category = {
-    id: 'category_id',
-    name: 'category name',
-    notes: [],
-  }
-
-  defaultNote: Note = {
-    id: 'note_id',
-    title: 'category title',
-    body: 'aiueo',
-  }
-
   openCategory(category: Category): void {
     if (this.selectedCategory === null || this.selectedCategory?.id !== category.id) {
       this.selectedCategory = category;
@@ -73,12 +61,22 @@ export default class Main extends Vue {
   }
 
   createCategory(): void {
-    this.categories.push(this.defaultCategory);
+    const newCategory: Category = {
+      id: `category_id_${createUUID()}`,
+      name: 'category name',
+      notes: [],
+    };
+    this.categories.push(newCategory);
   }
 
   createNote(): void {
     if (this.selectedCategory) {
-      this.selectedCategory.notes.push(this.defaultNote);
+      const newNote: Note = {
+        id: `note_id_${createUUID()}`,
+        title: 'note title',
+        body: 'note body',
+      };
+      this.selectedCategory.notes.push(newNote);
     }
   }
 
