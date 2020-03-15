@@ -3,15 +3,21 @@
     <div class="sidebar">
       <div class="categoryList">
         <button @click="createCategory()">Create Category</button>
-        <div :key="category.id" v-for="category in categories">
-          <div class="categoryName" @click="openCategory(category)">{{ category.name  }}</div>
-        </div>
+        <ul :key="category.id" v-for="category in categories">
+          <li>
+            <button @click="deleteCategory(category)">🗑</button>
+            <span class="categoryName" @click="openCategory(category)">{{ category.name  }}</span>
+          </li>
+        </ul>
       </div>
       <div class="noteList" v-if="selectedCategory">
         <button @click="createNote()">Create Note</button>
-        <div :key="note.id" v-for="note in selectedCategory.notes">
-          <div class="noteTitle" @click="openNote(note)">{{ note.title }}</div>
-        </div>
+        <ul :key="note.id" v-for="note in selectedCategory.notes">
+          <li>
+            <button @click="deleteNote(note)">🗑</button>
+            <span class="noteTitle" @click="openNote(note)">{{ note.title }}</span>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="editor">
@@ -27,18 +33,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import createUUID from '../common/uuid';
 import mockCategories from '../mock';
-
-interface Note {
-  id: string;
-  title: string;
-  body: string;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  notes: Note[];
-}
+import { Category, Note } from '../store/types';
 
 @Component
 export default class Main extends Vue {
@@ -70,19 +65,27 @@ export default class Main extends Vue {
   }
 
   createNote(): void {
-    if (this.selectedCategory) {
-      const newNote: Note = {
-        id: `note_id_${createUUID()}`,
-        title: 'note title',
-        body: 'note body',
-      };
-      this.selectedCategory.notes.push(newNote);
-    }
+    if (!this.selectedCategory) return;
+
+    const newNote: Note = {
+      id: `note_id_${createUUID()}`,
+      title: 'note title',
+      body: 'note body',
+    };
+    this.selectedCategory.notes.push(newNote);
   }
 
-  // deleteCategory(category: Category): void {}
+  deleteCategory(category: Category): void {
+    console.log(category.id);
+    this.categories = this.categories.filter((c) => c.id !== category.id);
+  }
 
-  // deleteNote(note: Note): void {}
+  deleteNote(note: Note): void {
+    const { selectedCategory } = this;
+    if (!selectedCategory) return;
+
+    selectedCategory.notes = selectedCategory.notes.filter((n) => n.id !== note.id);
+  }
 
   // updateCategory(category: Category): void {}
 
