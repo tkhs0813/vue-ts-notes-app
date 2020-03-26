@@ -42,6 +42,11 @@ export default class Main extends Vue {
   selectedNote: Note | null = null;
 
   // eslint-disable-next-line class-methods-use-this
+  get categories() {
+    return noteModle.categories;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   public created() {
     noteModle.fetchData();
   }

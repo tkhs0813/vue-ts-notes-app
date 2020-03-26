@@ -4,10 +4,16 @@ import {
   VuexModule, Module, Mutation, Action, getModule,
 } from 'vuex-module-decorators';
 import mock from '@/mock';
+import store from '@/store';
 import { Category, Note } from '../types';
 
 
-@Module({ namespaced: true, name: 'notes' })
+@Module({
+  dynamic: true,
+  namespaced: true,
+  name: 'notes',
+  store,
+})
 class Notes extends VuexModule {
   public categories: Category[] = [];
 
@@ -48,21 +54,21 @@ class Notes extends VuexModule {
     // TODO
   }
 
-  @Action
+  @Action({ commit: 'updateCategory' })
   fetchData() {
     // 最初にデータ全部とってきて入れる
-    this.context.commit('updateCateogry', mock);
+    return mock;
   }
 
-  @Action
+  @Action({ commit: 'addCategory' })
   createCategory(category: Category) {
-    this.context.commit('addCategory', categorhis.categories.push(newCategory));
+    return categorhis.categories.push(newCategory);
   }
 
-  @Action
+  @Action({ commit: 'removeCategory' })
   deleteCategory(category: Category) {
     // TODO
-    this.context.commit('removeCategory', category);
+    return category;
   }
 
   @Action
