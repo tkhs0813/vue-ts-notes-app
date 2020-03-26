@@ -23,6 +23,7 @@
     <div class="editor">
       <div v-if="selectedNote">
         <h2>{{ selectedNote.title }}</h2>
+        <!-- <button @click="saveNote()">save</button> -->
         <textarea v-model="selectedNote.body"></textarea>
       </div>
     </div>
@@ -43,7 +44,7 @@ export default class Main extends Vue {
 
   // eslint-disable-next-line class-methods-use-this
   get categories() {
-    return noteModle.categories;
+    return noteModle.findAllCategory;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -96,6 +97,11 @@ export default class Main extends Vue {
 
     selectedCategory.notes = selectedCategory.notes.filter((n) => n.id !== note.id);
   }
+
+  // saveNote(note: Note): void {
+  //   const { selectedNote } = this;
+  //   if (!selectedNote) return;
+  // }
 
   // updateCategory(category: Category): void {}
 

@@ -17,16 +17,9 @@ import { Category, Note } from '../types';
 class Notes extends VuexModule {
   public categories: Category[] = [];
 
-  public get categoryById(): Category {
-    // TODO
-  }
 
-  public get note(): Note {
-    // TODO
-  }
-
-  public get noteById(): Note {
-    // TODO
+  public get findAllCategory(): Category[] {
+    return this.categories;
   }
 
   @Mutation
@@ -62,12 +55,11 @@ class Notes extends VuexModule {
 
   @Action({ commit: 'addCategory' })
   createCategory(category: Category) {
-    return categorhis.categories.push(newCategory);
+    return category;
   }
 
   @Action({ commit: 'removeCategory' })
   deleteCategory(category: Category) {
-    // TODO
     return category;
   }
 
