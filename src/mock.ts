@@ -1,4 +1,6 @@
-const mockCategories = [
+import { Category } from './store/types';
+
+const mockCategories: Category[] = [
   {
     id: 'category_id_1_1',
     name: 'category_name_1_1',

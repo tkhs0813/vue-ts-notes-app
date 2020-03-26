@@ -31,17 +31,20 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import noteModle from '@/store/Note';
 import createUUID from '../common/uuid';
-import mockCategories from '../mock';
 import { Category, Note } from '../store/types';
 
 @Component
 export default class Main extends Vue {
-  categories: Category[] = mockCategories;
-
   selectedCategory: Category | null = null;
 
   selectedNote: Note | null = null;
+
+  // eslint-disable-next-line class-methods-use-this
+  public created() {
+    noteModle.fetchData();
+  }
 
   openCategory(category: Category): void {
     if (this.selectedCategory === null || this.selectedCategory?.id !== category.id) {
@@ -55,13 +58,14 @@ export default class Main extends Vue {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   createCategory(): void {
     const newCategory: Category = {
       id: `category_id_${createUUID()}`,
       name: 'category name',
       notes: [],
     };
-    this.categories.push(newCategory);
+    noteModle.createCategory(newCategory);
   }
 
   createNote(): void {
@@ -75,9 +79,10 @@ export default class Main extends Vue {
     this.selectedCategory.notes.push(newNote);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   deleteCategory(category: Category): void {
     console.log(category.id);
-    this.categories = this.categories.filter((c) => c.id !== category.id);
+    noteModle.deleteCategory(category);
   }
 
   deleteNote(note: Note): void {
