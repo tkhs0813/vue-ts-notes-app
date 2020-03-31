@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <Login />
     <div class="sidebar">
       <div class="categoryList">
         <button @click="createCategory()">Create Category</button>
@@ -32,11 +33,17 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import firebase from 'firebase';
+import Login from '@/views/Login.vue';
 import noteModle from '@/store/Note';
 import createUUID from '../common/uuid';
 import { Category, Note } from '../store/types';
 
-@Component
+@Component({
+  components: {
+    Login,
+  },
+})
 export default class Main extends Vue {
   selectedCategory: Category | null = null;
 
@@ -50,6 +57,12 @@ export default class Main extends Vue {
   // eslint-disable-next-line class-methods-use-this
   public created() {
     noteModle.fetchData();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  signIn(): void {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithRedirect(provider);
   }
 
   openCategory(category: Category): void {
