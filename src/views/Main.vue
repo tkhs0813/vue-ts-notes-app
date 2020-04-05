@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <Login />
+    <!-- <Login /> -->
     <div class="sidebar">
       <div class="categoryList">
         <button @click="createCategory()">Create Category</button>
@@ -34,14 +34,14 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import firebase from 'firebase';
-import Login from '@/views/Login.vue';
+// import Login from '@/views/Login.vue';
 import noteModle from '@/store/Note';
 import createUUID from '../common/uuid';
 import { Category, Note } from '../store/types';
 
 @Component({
   components: {
-    Login,
+    // Login,
   },
 })
 export default class Main extends Vue {
