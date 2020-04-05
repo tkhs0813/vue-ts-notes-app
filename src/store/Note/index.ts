@@ -1,11 +1,11 @@
 /* eslint-disable class-methods-use-this */
 // @ts-nocheck
-import {
-  VuexModule, Module, Mutation, Action, getModule,
-} from 'vuex-module-decorators';
-import mock from '@/mock';
+import { mockNotes, mockTags } from '@/mock';
 import store from '@/store';
-import { Category, Note } from '../types';
+import {
+  Action, getModule, Module, Mutation, VuexModule,
+} from 'vuex-module-decorators';
+import { Note } from '../types';
 
 
 @Module({
@@ -15,62 +15,65 @@ import { Category, Note } from '../types';
   store,
 })
 class Notes extends VuexModule {
-  public categories: Category[] = [];
+  private notes: Note[] = [];
 
+  private tags: string[] = [];
 
-  public get findAllCategory(): Category[] {
-    return this.categories;
+  public get findAllNote(): Note[] {
+    return this.notes;
   }
 
-  @Mutation
-  addCategory(category: Category) {
-    this.categories.push(category);
+  public get findNote(): Note[] {
+    return (tag: string) => {
+      const result: Note[] = [];
+      for (let i = 0; i < this.notes.length; i += 1) {
+        const note = this.notes[i];
+        if (tag) {
+          if (note.tags.some((t) => t === tag)) result.push(note);
+        } else if (!note.tags) result.push(note);
+      }
+
+      return result;
+    };
   }
 
-  @Mutation
-  updateCategory(categories: Category[]) {
-    this.categories = categories;
-  }
-
-  @Mutation
-  removeCategory(category: Category) {
-    this.categories = this.categories.filter((c) => c.id !== category.id);
+  public get findAllTags(): string[] {
+    return this.tags;
   }
 
   @Mutation
   addNote(note: Note) {
-    // TODO
+    this.notes.push(note);
+  }
+
+  @Mutation
+  updateNote(notes: Note[]) {
+    this.notes = notes;
   }
 
   @Mutation
   removeNote(note: Note) {
-    // TODO
+    this.notes = this.notes.filter((n) => n.id !== note.id);
   }
 
-  @Action({ commit: 'updateCategory' })
+  @Mutation
+  updateTag(tags: string[]) {
+    this.tags = tags;
+  }
+
   fetchData() {
-    // 最初にデータ全部とってきて入れる
-    return mock;
+    this.context.commit('updateNote', mockNotes);
+    this.context.commit('updateTag', mockTags);
   }
 
-  @Action({ commit: 'addCategory' })
-  createCategory(category: Category) {
-    return category;
-  }
-
-  @Action({ commit: 'removeCategory' })
-  deleteCategory(category: Category) {
-    return category;
-  }
-
-  @Action
+  @Action({ commit: 'addNote' })
   createNote(note: Note) {
-    // TODO
+    return note;
   }
 
-  @Action
+  @Action({ commit: 'removeNote' })
   deleteNote(note: Note) {
-    // TODO
+    return note;
   }
 }
 

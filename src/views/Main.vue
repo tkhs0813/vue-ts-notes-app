@@ -1,13 +1,16 @@
 <template>
   <div class="main">
     <!-- <Login /> -->
+
+    <!-- サイドバー -->
+    <Sidebar />
     <div class="sidebar">
       <div class="categoryList">
         <button @click="createCategory()">Create Category</button>
         <ul :key="category.id" v-for="category in categories">
           <li>
             <button @click="deleteCategory(category)">🗑</button>
-            <span class="categoryName" @click="openCategory(category)">{{ category.name  }}</span>
+            <span class="categoryName" @click="openCategory(category)">{{ category.name }}</span>
           </li>
         </ul>
       </div>
@@ -21,54 +24,48 @@
         </ul>
       </div>
     </div>
-    <div class="editor">
-      <div v-if="selectedNote">
-        <h2>{{ selectedNote.title }}</h2>
-        <!-- <button @click="saveNote()">save</button> -->
-        <textarea v-model="selectedNote.body"></textarea>
-      </div>
-    </div>
+
+    <!-- メインのエディタ部分 -->
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout align-center justify-center>
+          <div class="editor">
+            <div v-if="selectedNote">
+              <h2>{{ selectedNote.title }}</h2>
+              <!-- <button @click="saveNote()">save</button> -->
+              <textarea v-model="selectedNote.body"></textarea>
+            </div>
+          </div>
+        </v-layout>
+      </v-container>
+    </v-content>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import firebase from 'firebase';
-// import Login from '@/views/Login.vue';
+import Sidebar from '@/components/Sidebar.vue';
 import noteModle from '@/store/Note';
 import createUUID from '../common/uuid';
-import { Category, Note } from '../store/types';
+import { Note } from '../store/types';
 
 @Component({
   components: {
-    // Login,
+    Sidebar,
   },
 })
 export default class Main extends Vue {
-  selectedCategory: Category | null = null;
-
   selectedNote: Note | null = null;
 
   // eslint-disable-next-line class-methods-use-this
-  get categories() {
-    return noteModle.findAllCategory;
+  get notes() {
+    return noteModle.findAllNote;
   }
 
   // eslint-disable-next-line class-methods-use-this
   public created() {
     noteModle.fetchData();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  signIn(): void {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-  }
-
-  openCategory(category: Category): void {
-    if (this.selectedCategory === null || this.selectedCategory?.id !== category.id) {
-      this.selectedCategory = category;
-    }
   }
 
   openNote(note: Note): void {
@@ -79,45 +76,18 @@ export default class Main extends Vue {
 
   // eslint-disable-next-line class-methods-use-this
   createCategory(): void {
-    const newCategory: Category = {
-      id: `category_id_${createUUID()}`,
-      name: 'category name',
-      notes: [],
-    };
-    noteModle.createCategory(newCategory);
-  }
-
-  createNote(): void {
-    if (!this.selectedCategory) return;
-
     const newNote: Note = {
       id: `note_id_${createUUID()}`,
-      title: 'note title',
+      title: 'note name',
+      tags: [],
       body: 'note body',
     };
-    this.selectedCategory.notes.push(newNote);
+    noteModle.createNote(newNote);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  deleteCategory(category: Category): void {
-    console.log(category.id);
-    noteModle.deleteCategory(category);
+  deleteCategory(note: Note): void {
+    noteModle.deleteNote(note);
   }
-
-  deleteNote(note: Note): void {
-    const { selectedCategory } = this;
-    if (!selectedCategory) return;
-
-    selectedCategory.notes = selectedCategory.notes.filter((n) => n.id !== note.id);
-  }
-
-  // saveNote(note: Note): void {
-  //   const { selectedNote } = this;
-  //   if (!selectedNote) return;
-  // }
-
-  // updateCategory(category: Category): void {}
-
-  // updateNote(note: Note): void {}
 }
 </script>
