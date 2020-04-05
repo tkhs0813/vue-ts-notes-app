@@ -61,6 +61,7 @@ class Notes extends VuexModule {
     this.tags = tags;
   }
 
+  @Action
   fetchData() {
     this.context.commit('updateNote', mockNotes);
     this.context.commit('updateTag', mockTags);
