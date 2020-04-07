@@ -38,7 +38,14 @@ class Notes extends VuexModule {
   }
 
   public get findAllTags(): string[] {
-    return this.tags;
+    const result = [];
+    for (let i = 0; i < this.tags.length; i += 1) {
+      const tag = this.tags[i];
+
+      result.push({ name: tag });
+    }
+
+    return result;
   }
 
   @Mutation

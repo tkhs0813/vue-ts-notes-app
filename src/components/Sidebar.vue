@@ -1,28 +1,28 @@
 <template>
   <v-navigation-drawer app>
     <v-list nav dense>
-      <template v-for="nav_list in nav_lists">
-        <v-list-item v-if="!nav_list.lists" :to="nav_list.link" :key="nav_list.name">
+      <template v-for="navList in navLists">
+        <v-list-item v-if="!navList.lists" :to="navList.link" :key="navList.name">
           <v-list-item-icon>
-            <v-icon>{{ nav_list.icon }}</v-icon>
+            <v-icon>{{ navList.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ nav_list.name }}</v-list-item-title>
+            <v-list-item-title>{{ navList.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-group
           v-else
           no-action
-          :prepend-icon="nav_list.icon"
-          :key="nav_list.name"
-          v-model="nav_list.active"
+          :prepend-icon="navList.icon"
+          :key="navList.name"
+          v-model="navList.active"
         >
           <template v-slot:activator>
             <v-list-item-content>
-              <v-list-item-title>{{ nav_list.active}}{{ nav_list.name }}</v-list-item-title>
+              <v-list-item-title>{{ navList.name }}</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item v-for="list in nav_list.lists" :key="list.name" :to="list.link">
+          <v-list-item v-for="list in navList.lists" :key="list.name" :to="list.link">
             <v-list-item-title>{{ list.name }}</v-list-item-title>
           </v-list-item>
         </v-list-group>
@@ -38,11 +38,18 @@ import firebase from 'firebase';
 import noteModle from '@/store/Note';
 import createUUID from '../common/uuid';
 
+interface NavList {
+  name: string;
+  icon: string;
+  link?: string;
+  lists?: string[];
+}
+
 @Component({
   components: {},
 })
 export default class Main extends Vue {
-  nav_lists = [
+  defaultNavList: NavList[] = [
     {
       name: 'All Notes',
       icon: 'mdi-speedometer',
@@ -51,15 +58,18 @@ export default class Main extends Vue {
       name: 'Tags',
       icon: 'mdi-speedometer',
       link: '',
-      lists: [
-        {
-          name: 'Tag Name',
-        },
-        {
-          name: 'Tag Name',
-        },
-      ],
+      lists: [],
     },
   ];
+
+  @Prop({ type: Array, required: true })
+  tags!: string[]
+
+  get navLists() {
+    const navList = this.defaultNavList;
+    navList[1].lists = this.tags;
+
+    return navList;
+  }
 }
 </script>
