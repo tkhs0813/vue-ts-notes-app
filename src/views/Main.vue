@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- サイドバー -->
-    <Sidebar :tags="tags" />
+    <Sidebar :tags="tags" :tagClick="onTagClickHandler"/>
 
     <!-- メイン -->
     <v-content style="border: 1px solid black;">
@@ -40,13 +40,13 @@ export default class Main extends Vue {
   selectedNote: Note | null = null;
 
   // eslint-disable-next-line class-methods-use-this
-  get notes() {
-    return noteModle.findAllNote;
+  get tags() {
+    return noteModle.findAllTags;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  get tags() {
-    return noteModle.findAllTags;
+  get notes() {
+    return (tag: string) => noteModle.findNote(tag);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -55,8 +55,9 @@ export default class Main extends Vue {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public onClickHandler() {
-    console.log('onClickHandler');
+  public onTagClickHandler(tag: string) {
+    console.log('onClickHandler', tag);
+    this.notes(tag);
   }
 }
 </script>
