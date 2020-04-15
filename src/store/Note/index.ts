@@ -24,8 +24,12 @@ class Notes extends VuexModule {
   }
 
   public get findNote(): Note[] {
-    return (tag: string) => {
+    return (tag) => {
       const result: Note[] = [];
+
+      if (!tag) return [];
+      if (tag === 'AllNotes') return this.notes;
+
       for (let i = 0; i < this.notes.length; i += 1) {
         const note = this.notes[i];
         if (tag) {

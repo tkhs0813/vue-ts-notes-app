@@ -61,7 +61,7 @@ interface NavList {
 export default class Main extends Vue {
   defaultNavList: NavList[] = [
     {
-      name: 'All Notes',
+      name: 'AllNotes',
       icon: 'mdi-speedometer',
     },
     {

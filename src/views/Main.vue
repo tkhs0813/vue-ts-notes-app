@@ -39,6 +39,8 @@ import { Note } from '../store/types';
 export default class Main extends Vue {
   selectedNote: Note | null = null;
 
+  selectedTag: string | null = null;
+
   // eslint-disable-next-line class-methods-use-this
   get tags() {
     return noteModle.findAllTags;
@@ -46,7 +48,7 @@ export default class Main extends Vue {
 
   // eslint-disable-next-line class-methods-use-this
   get notes() {
-    return (tag: string) => noteModle.findNote(tag);
+    return noteModle.findNote(this.selectedTag);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -57,7 +59,7 @@ export default class Main extends Vue {
   // eslint-disable-next-line class-methods-use-this
   public onTagClickHandler(tag: string) {
     console.log('onClickHandler', tag);
-    this.notes(tag);
+    this.selectedTag = tag;
   }
 }
 </script>

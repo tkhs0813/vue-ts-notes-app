@@ -4,7 +4,7 @@ export const mockNotes: Note[] = [
   {
     id: 'note_id_1',
     title: 'note_title_1',
-    tags: ['programing', 'life'],
+    tags: ['Programing', 'Life'],
     body: 'note_body_1',
   },
   {
@@ -16,7 +16,8 @@ export const mockNotes: Note[] = [
 ];
 
 export const mockTags: string[] = [
-  'programing',
-  'vue.js',
-  'life',
+  'Programing',
+  'Vue.js',
+  'Life',
+  'TypeScript',
 ];
