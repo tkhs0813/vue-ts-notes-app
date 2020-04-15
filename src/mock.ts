@@ -16,7 +16,7 @@ export const mockNotes: Note[] = [
 ];
 
 export const mockTags: string[] = [
-  'Programing',
-  'Vue.js',
-  'Life',
+  'programing',
+  'vue.js',
+  'life',
 ];
